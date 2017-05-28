@@ -1,0 +1,91 @@
+@startuml
+'skinparam handwritten true
+skinparam interface {
+	backgroundColor RosyBrown
+	borderColor orange
+}
+skinparam usecase {
+	BackgroundColor DarkSeaGreen
+	BorderColor DarkSlateGray
+	ArrowColor Olive
+	ActorBorderColor black
+	ActorFontName Courier
+
+	BackgroundColor<< Main >> YellowGreen
+	BorderColor<< Main >> YellowGreen
+	ActorBackgroundColor<< Human >> Gold
+}
+title 新規クラス複製プロトコル
+
+([被コピーfile]) as from
+(複写コピー／生成) as do_copy
+rectangle "作成クラス名\n..." as params00 <<コール時 パラメータ>> #A9DCDF
+
+rectangle "init処理" as proc00 #skyBlue
+
+rectangle "javaファイル作成" as proc01 #skyBlue
+rectangle "設定xmlファイル編集" as proc02 #skyBlue
+rectangle "その他処理" as proc03 #skyBlue
+
+package impls00 <<処理概要>>{
+	(生成ファイル存否チェック) as crcl00 #orange
+	rectangle rect000[
+		Axxx.java
+		AxxxDao.java
+		AxxxBean.java
+		...
+	]
+}
+package impls01 <<処理概要>>{
+
+	(スケルトン作成) as crcl01 #orange
+	database data101[
+		java
+		===
+
+		Axxx.java
+		AxxxDao.java
+		AxxxBean.java
+		...
+	]
+
+	(その他) as crcl02 #orange
+	database data102[
+		xxx
+		===
+
+		yyy
+	]
+	database data201[
+		zzz
+		===
+
+		vvv
+	]
+}
+
+from -> do_copy
+[do_copy] -d-> proc00
+[proc00] ----> proc01
+[proc01] -d---> proc02
+[proc02] -d---> proc03
+
+impls00 =[hidden]d=== impls01
+crcl00 =[hidden]d= crcl01
+crcl01 =[hidden]d= crcl02
+
+params00 =[hidden]d== crcl00
+
+crcl00 =[hidden]r= rect000
+crcl01 =[hidden]r= data101
+data101 =[hidden]r= data102
+crcl02 =[hidden]r= data201
+proc00 .r. impls00
+proc01 .r. impls01
+
+[data101] -[hidden]r- data102
+
+proc03 -d--> () end
+rectangle "java生成\nxml編集\n。。。" as params01 <<OUT：返戻return>> #A9DCDF
+[end] -[hidden]r- params01
+@enduml
